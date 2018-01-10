@@ -44,7 +44,7 @@
     lineView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:lineView];
     
-    _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, [UIScreen mainScreen].bounds.size.width, 48  )];
+    _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, [UIScreen mainScreen].bounds.size.width, 48)];
     _dateLabel.textAlignment = NSTextAlignmentCenter;
     _dateLabel.font = [UIFont systemFontOfSize:20];
     [self.contentView addSubview:_dateLabel];

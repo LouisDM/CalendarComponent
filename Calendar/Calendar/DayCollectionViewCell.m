@@ -29,24 +29,26 @@
         
 //        7FD4DC [UIColor colorWithRed:127.0/255 green:212.0/255 blue:220.0/255 alpha:1]
         
-        self.bgLeft = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.bounds.size.width/2, self.bounds.size.width)];
+        CGFloat length = self.bounds.size.width *2/3;
+        
+        self.bgLeft = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.bounds.size.width/2, length)];
         [self.contentView addSubview:self.bgLeft];
         
-        self.bgRight = [[UIView alloc]initWithFrame:CGRectMake(self.bounds.size.width/2, 0, self.bounds.size.width/2, self.bounds.size.width)];
+        self.bgRight = [[UIView alloc]initWithFrame:CGRectMake(self.bounds.size.width/2, 0, self.bounds.size.width/2, length)];
         [self.contentView addSubview:self.bgRight];
         
         self.backgroundColor = [UIColor whiteColor];
-        self.gregorianCalendarLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.width)];
+        self.gregorianCalendarLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, length, length)];
         self.gregorianCalendarLabel.center = self.contentView.center;
         self.gregorianCalendarLabel.textAlignment = NSTextAlignmentCenter;
         self.gregorianCalendarLabel.font = [UIFont systemFontOfSize:12];
         self.gregorianCalendarLabel.textColor = [UIColor blackColor];
         self.gregorianCalendarLabel.layer.masksToBounds = YES;
-        self.gregorianCalendarLabel.layer.cornerRadius = self.bounds.size.width/2;
+        self.gregorianCalendarLabel.layer.cornerRadius = length/2;
         [self.contentView addSubview:self.gregorianCalendarLabel];
         
-        self.bgLeft.center = CGPointMake(self.gregorianCalendarLabel.center.x/2, self.gregorianCalendarLabel.center.y);
-        self.bgRight.center = CGPointMake(self.gregorianCalendarLabel.center.x/2 *3, self.gregorianCalendarLabel.center.y);
+        self.bgLeft.center = CGPointMake(self.contentView.center.x/2, self.contentView.center.y);
+        self.bgRight.center = CGPointMake(self.contentView.center.x/2 *3, self.contentView.center.y);
 //        self.lunarCalendarLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.self.bounds.size.height/2, self.bounds.size.width, self.bounds.size.height/2)];
 //        self.lunarCalendarLabel.textAlignment = NSTextAlignmentCenter;
 //        self.lunarCalendarLabel.font = [UIFont systemFontOfSize:12];

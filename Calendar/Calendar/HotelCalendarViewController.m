@@ -199,6 +199,10 @@
                     break;
             }
             self.isSelectEnd = YES;
+            if (returnDaymodel.state == DayModelStateStart) {
+                self.isSelectEnd = NO;
+            }
+            
         }
         for (MonthModel *Mo in self.dataArray) {
             for (DayModel *mo in Mo.days) {
