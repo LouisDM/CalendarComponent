@@ -23,9 +23,11 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"日历选择组件";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(selectedCheckDate)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"reloadData" style:UIBarButtonItemStylePlain target:self action:@selector(selectedCheckDate)];
     [self.view addSubview:self.weekView];
     [self.view addSubview:self.tableView];
+    
+    
 
 }
 
@@ -78,6 +80,8 @@
 /////////////////////////////////////点击事件///////////////////////////////////////////
 #pragma mark - 确定事件返回
 -(void)selectedCheckDate{
+    [self.tableView reloadData];
+    return;
     NSDate *startDate;
     BOOL isHaveStartDate = NO;
     for (MonthModel *Mo in self.dataArray) {
