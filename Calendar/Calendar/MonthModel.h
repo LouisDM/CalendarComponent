@@ -67,6 +67,10 @@ typedef enum : NSUInteger {
  */
 @property(nonatomic,assign)BOOL isToday;
 
+/**
+ * 是否选了结束时间
+ */
+@property(nonatomic,assign)BOOL isSelectEnd;
 
 @end
 

@@ -17,6 +17,8 @@
 @interface DayCollectionViewCell ()
 @property(nonatomic,strong) UILabel *gregorianCalendarLabel;
 //@property(nonatomic,strong) UILabel *lunarCalendarLabel;
+@property(nonatomic,strong) UIView *bgLeft;
+@property(nonatomic,strong) UIView *bgRight;
 @end
 @implementation DayCollectionViewCell
 - (instancetype)initWithFrame:(CGRect)frame
@@ -26,6 +28,12 @@
 //        00A9BA [UIColor colorWithRed:0.0 green:169.0/255 blue:186.0/255 alpha:1]
         
 //        7FD4DC [UIColor colorWithRed:127.0/255 green:212.0/255 blue:220.0/255 alpha:1]
+        
+        self.bgLeft = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.bounds.size.width/2, self.bounds.size.width)];
+        [self.contentView addSubview:self.bgLeft];
+        
+        self.bgRight = [[UIView alloc]initWithFrame:CGRectMake(self.bounds.size.width/2, 0, self.bounds.size.width/2, self.bounds.size.width)];
+        [self.contentView addSubview:self.bgRight];
         
         self.backgroundColor = [UIColor whiteColor];
         self.gregorianCalendarLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.width)];
@@ -37,6 +45,8 @@
         self.gregorianCalendarLabel.layer.cornerRadius = self.bounds.size.width/2;
         [self.contentView addSubview:self.gregorianCalendarLabel];
         
+        self.bgLeft.center = CGPointMake(self.gregorianCalendarLabel.center.x/2, self.gregorianCalendarLabel.center.y);
+        self.bgRight.center = CGPointMake(self.gregorianCalendarLabel.center.x/2 *3, self.gregorianCalendarLabel.center.y);
 //        self.lunarCalendarLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.self.bounds.size.height/2, self.bounds.size.width, self.bounds.size.height/2)];
 //        self.lunarCalendarLabel.textAlignment = NSTextAlignmentCenter;
 //        self.lunarCalendarLabel.font = [UIFont systemFontOfSize:12];
@@ -53,6 +63,8 @@
         self.gregorianCalendarLabel.text = @"";
 //        self.lunarCalendarLabel.text = @"";
         self.gregorianCalendarLabel.backgroundColor = NormalColor;
+        self.bgLeft.backgroundColor = [UIColor whiteColor];
+        self.bgRight.backgroundColor = [UIColor whiteColor];
     }else{
         self.gregorianCalendarLabel.text = [NSString stringWithFormat:@"%02ld",model.day];
 //        if (model.isToday) {//是今天
@@ -92,6 +104,8 @@
         switch (model.state) {
             case DayModelStateNormal:{
                 self.gregorianCalendarLabel.backgroundColor = NormalColor;
+                self.bgLeft.backgroundColor = [UIColor whiteColor];
+                self.bgRight.backgroundColor = [UIColor whiteColor];
                 break;
             }
             case DayModelStateStart:{
@@ -99,6 +113,12 @@
 //                self.lunarCalendarLabel.textColor = [UIColor whiteColor];
 //                self.gregorianCalendarLabel.text = @"入住";
                 self.gregorianCalendarLabel.textColor = [UIColor whiteColor];
+                self.bgLeft.backgroundColor = [UIColor whiteColor];
+                if (model.isSelectEnd) {
+                    self.bgRight.backgroundColor = SelectedColor;
+                }else{
+                    self.bgRight.backgroundColor = [UIColor whiteColor];
+                }
                 break;
             }
             case DayModelStateEnd:{
@@ -106,12 +126,16 @@
 //                self.lunarCalendarLabel.textColor = [UIColor whiteColor];
 //                self.gregorianCalendarLabel.text = @"离店";
                 self.gregorianCalendarLabel.textColor = [UIColor whiteColor];
+                self.bgLeft.backgroundColor = SelectedColor;
+                self.bgRight.backgroundColor = [UIColor whiteColor];
                 break;
             }
             case DayModelStateSelected:{
                 self.gregorianCalendarLabel.backgroundColor = SelectedColor;
 //                self.lunarCalendarLabel.textColor = [UIColor whiteColor];
                 self.gregorianCalendarLabel.textColor = [UIColor whiteColor];
+                self.bgLeft.backgroundColor = SelectedColor;
+                self.bgRight.backgroundColor = SelectedColor;
                 break;
             }
             default:

@@ -11,6 +11,7 @@
 #import "MonthModel.h"
 #import "DayCollectionViewCell.h"
 
+#define Spacing 0
 @interface MonthTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property(nonatomic,strong)UICollectionView *collectionView;
 @property(nonatomic,strong)UILabel *dateLabel;
@@ -54,11 +55,10 @@
 {
     if (!_collectionView) {
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
-        flowLayout.minimumLineSpacing = 2;
-        flowLayout.minimumInteritemSpacing = 2;
-        flowLayout.sectionInset = UIEdgeInsetsMake(2, 2, 2, 2);
-        flowLayout.itemSize =  CGSizeMake(([UIScreen mainScreen].bounds.size.width - 16)/7, 60);
-        
+        flowLayout.minimumLineSpacing = Spacing;
+        flowLayout.minimumInteritemSpacing = Spacing;
+        flowLayout.sectionInset = UIEdgeInsetsMake(Spacing, Spacing, Spacing, Spacing);
+        flowLayout.itemSize =  CGSizeMake(([UIScreen mainScreen].bounds.size.width)/7, 60);
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 60, [UIScreen mainScreen].bounds.size.width, 500) collectionViewLayout:flowLayout];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;

@@ -10,10 +10,12 @@
 #import "MonthModel.h"
 #import "MonthTableViewCell.h"
 #define ISIPHONEX ([UIScreen mainScreen].bounds.size.height == 812)
+#define MAXMOUTH 13
 @interface HotelCalendarViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
 @property(nonatomic,strong)NSMutableArray *dataArray;
 @property(nonatomic,strong)UIView *weekView;
+@property(nonatomic,assign)BOOL isSelectEnd;//是否选了结束时间
 @end
 
 @implementation HotelCalendarViewController
@@ -23,12 +25,10 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"日历选择组件";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"reloadData" style:UIBarButtonItemStylePlain target:self action:@selector(selectedCheckDate)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(selectedCheckDate)];
     [self.view addSubview:self.weekView];
     [self.view addSubview:self.tableView];
     
-    
-
 }
 
 /////////////////////////////////////创建视图///////////////////////////////////////////
@@ -42,6 +42,7 @@
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(self.weekView.frame), self.view.bounds.size.width, self.view.bounds.size.height - self.weekView.bounds.size.height-64-exHeight) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.estimatedRowHeight = 0;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.backgroundColor = [UIColor whiteColor];
 //        _tableView.showsVerticalScrollIndicator = NO;
@@ -80,8 +81,6 @@
 /////////////////////////////////////点击事件///////////////////////////////////////////
 #pragma mark - 确定事件返回
 -(void)selectedCheckDate{
-    [self.tableView reloadData];
-    return;
     NSDate *startDate;
     BOOL isHaveStartDate = NO;
     for (MonthModel *Mo in self.dataArray) {
@@ -126,7 +125,6 @@
     return self.dataArray.count;
 }
 -(CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"indexPath.row:%d",indexPath.row);
     MonthModel *model = self.dataArray[indexPath.row];
     return model.cellHight;
 }
@@ -164,6 +162,7 @@
         if ((!isHaveStart && !isHaveEnd && !isHaveSelected )|| (!isHaveStart && !isHaveEnd) ) {
             //没有设置开始结束
             returnDaymodel.state = DayModelStateStart;
+            self.isSelectEnd = NO;
         }else if ((isHaveEnd && isHaveStart)){
             //有开始有结束
             for (MonthModel *Mo in weakSelf.dataArray) {
@@ -171,6 +170,7 @@
                     mo.state = DayModelStateNormal;
                 }
             }
+            self.isSelectEnd = NO;
             returnDaymodel.state = DayModelStateStart;
         }else if(isHaveStart && !isHaveEnd){
             //有开始没有结束
@@ -198,38 +198,14 @@
                 default:
                     break;
             }
-
+            self.isSelectEnd = YES;
         }
-//        NSInteger selectMouthIndex = -1;
-//        for (NSInteger i = 0; i < weakSelf.dataArray.count; ++i) {
-//            MonthModel *Mo = weakSelf.dataArray[i];
-//            for (NSInteger j = 0; j < Mo.days.count; ++j) {
-//                DayModel *mo = Mo.days[j];
-//                if ([mo isEqual:returnDaymodel]) {
-//                    selectMouthIndex = i;
-//                    break;
-//                }
-//            }
-//            if (selectMouthIndex > -1) {
-//                break;
-//            }
-//        }
-//        CGFloat offsetHihgt = 0;
-//        for (NSInteger i = 0; i < selectMouthIndex; ++i) {
-//            MonthModel *Mo = weakSelf.dataArray[i];
-//            offsetHihgt += Mo.cellHight;
-//        }
-//        NSLog(@"selectMouthIndex:%d,offsetHihgt:%f",selectMouthIndex,offsetHihgt);
-//        NSLog(@"weakSelf.tableView.contentSize1 : %@",NSStringFromCGSize(weakSelf.tableView.contentSize));
-//        CGSize selectSize = weakSelf.tableView.contentSize;
+        for (MonthModel *Mo in self.dataArray) {
+            for (DayModel *mo in Mo.days) {
+                mo.isSelectEnd = self.isSelectEnd;
+            }
+        }
         [weakSelf.tableView reloadData];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            NSLog(@"weakSelf.tableView.contentSize2 : %@",NSStringFromCGSize(weakSelf.tableView.contentSize));
-//            [weakSelf.tableView setContentSize:selectSize];
-//            [weakSelf.tableView setContentOffset:CGPointMake(0, 0)animated:NO];
-//            [weakSelf.tableView setContentOffset:CGPointMake(0, 310)animated:YES];
-//        });
-
         
     };
     return cell;
@@ -243,7 +219,7 @@
         NSDate *nowdate = [NSDate date];
         NSInteger toYear = [self getDataFromDate:nowdate type:@"year"];
         NSInteger toMonth = [self getDataFromDate:nowdate type:@"month"];
-        for (int i = 0; i<13; i++) {
+        for (int i = 0; i<MAXMOUTH; i++) {
             if (i == 0) {
                 MonthModel  * monthModel = [[MonthModel alloc] init];
                 monthModel.year = toYear;
@@ -278,12 +254,11 @@
                 monthModel.cellNum = lineCount * 7;
                 monthModel.cellStartNum = 7 - oneLineCoune ;
                 monthModel.cellHight = 60 + 60 * lineCount + 2 * (lineCount + 1);
-                NSLog(@"cellHight:%f,linecount:%d",monthModel.cellHight,lineCount);
                 [_dataArray addObject:monthModel];
                 toMonth++;
                 
             }else{
-                if (toMonth == 13) {
+                if (toMonth == MAXMOUTH) {
                     toMonth = 1;
                     toYear += 1;
                 }
@@ -321,7 +296,6 @@
                 monthModel.cellNum = lineCount * 7;
                 monthModel.cellStartNum = 7 - oneLineCoune ;
                 monthModel.cellHight = 60 + 60 * lineCount + 2 * (lineCount + 1);
-                NSLog(@"cellHight:%f,linecount:%d",monthModel.cellHight,lineCount);
                 [_dataArray addObject:monthModel];
                 toMonth++;
             }
