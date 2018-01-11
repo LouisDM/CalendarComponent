@@ -15,6 +15,7 @@
 @interface MonthTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 @property(nonatomic,strong)UICollectionView *collectionView;
 @property(nonatomic,strong)UILabel *dateLabel;
+@property(nonatomic,strong)UILabel *yearLabel;
 @end
 @implementation MonthTableViewCell
 + (instancetype)cellWithTableView:(UITableView *)tableView{
@@ -40,14 +41,21 @@
 
 - (void)setContentView{
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 9)];
-//    lineView.backgroundColor = [UIColor colorWithRed:239/255.0 green:239/255.0 blue:239/255.0 alpha:1];
     lineView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:lineView];
     
     _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, [UIScreen mainScreen].bounds.size.width, 48)];
-    _dateLabel.textAlignment = NSTextAlignmentCenter;
+    _dateLabel.backgroundColor = [UIColor clearColor];
+    _dateLabel.textAlignment = NSTextAlignmentLeft;
     _dateLabel.font = [UIFont systemFontOfSize:20];
     [self.contentView addSubview:_dateLabel];
+    
+    _yearLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, [UIScreen mainScreen].bounds.size.width, 48)];
+    _dateLabel.backgroundColor = [UIColor clearColor];
+    _yearLabel.textAlignment = NSTextAlignmentRight;
+    _yearLabel.font = [UIFont systemFontOfSize:20];
+    [self.contentView addSubview:_yearLabel];
+    
     [self.contentView addSubview:self.collectionView];
 }
 
@@ -82,7 +90,8 @@
         frame.size.height = model.cellHight - 60;
         self.collectionView.frame = frame;
     });
-    self.dateLabel.text = [NSString stringWithFormat:@"%04ld年%02ld月",model.year ,model.month];
+    self.dateLabel.text = [NSString stringWithFormat:@"%02ld月",model.month];
+    self.yearLabel.text = [NSString stringWithFormat:@"%04ld年",model.year];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self.collectionView reloadData];
 }
